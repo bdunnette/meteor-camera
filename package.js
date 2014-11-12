@@ -1,8 +1,8 @@
 Package.describe({
-  name: "mdg:camera",
+  name: "bdunnette:camera",
   summary: "Photos with one function call on desktop and mobile.",
   version: "1.1.2",
-  git: "https://github.com/meteor/mobile-packages"
+  git: "https://github.com/bdunnette/meteor-camera"
 });
 
 Cordova.depends({

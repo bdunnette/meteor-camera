@@ -10,7 +10,7 @@ var canvasHeight = 0;
 
 var quality = 80;
 
-Template.viewfinder.rendered = function() {
+Template.viewfinder.rendered = function () {
   var template = this;
 
   waitingForPermission.set(true);
@@ -18,7 +18,7 @@ Template.viewfinder.rendered = function() {
   var video = template.find("video");
 
   // stream webcam video to the <video> element
-  var success = function(newStream) {
+  var success = function (newStream) {
     stream = newStream;
 
     if (navigator.mozGetUserMedia) {
@@ -33,7 +33,7 @@ Template.viewfinder.rendered = function() {
   };
 
   // user declined or there was some other error
-  var failure = function(err) {
+  var failure = function (err) {
     error.set(err);
   };
 
@@ -45,7 +45,7 @@ Template.viewfinder.rendered = function() {
     navigator.msGetUserMedia
   );
 
-  if (! navigator.getUserMedia) {
+  if (!navigator.getUserMedia) {
     // no browser support, sorry
     failure("BROWSER_NOT_SUPPORTED");
     return;
@@ -53,16 +53,16 @@ Template.viewfinder.rendered = function() {
 
   // initiate request for webcam
   navigator.getUserMedia({
-      video: true,
-      audio: false
+    video: true,
+    audio: false
   }, success, failure);
 
   // resize viewfinder to a reasonable size, not necessarily photo size
   var viewfinderWidth = 320;
   var viewfinderHeight = 240;
   var resized = false;
-  video.addEventListener('canplay', function() {
-    if (! resized) {
+  video.addEventListener('canplay', function () {
+    if (!resized) {
       viewfinderHeight = video.videoHeight / (video.videoWidth / viewfinderWidth);
       video.setAttribute('width', viewfinderWidth);
       video.setAttribute('height', viewfinderHeight);
@@ -112,7 +112,7 @@ Template.camera.events({
     } else {
       closeAndCallback(new Meteor.Error("cancel", "Photo taking was cancelled."));
     }
-    
+
     if (stream) {
       stream.stop();
     }
@@ -153,7 +153,7 @@ Template.viewfinder.helpers({
  */
 MeteorCamera.getPicture = function (options, callback) {
   // if options are not passed
-  if (! callback) {
+  if (!callback) {
     callback = options;
     options = {};
   }
@@ -176,14 +176,24 @@ MeteorCamera.getPicture = function (options, callback) {
   canvasHeight = Math.round(canvasHeight);
 
   var view;
-  
+
   closeAndCallback = function () {
     var originalArgs = arguments;
     UI.remove(view);
     photo.set(null);
     callback.apply(null, originalArgs);
   };
-  
-  view = UI.renderWithData(Template.camera);
-  UI.insert(view, document.body);
+
+  //  view = UI.renderWithData(Template.camera);
+  view = UI.toHTMLWithData(Template.camera);
+  console.log(view);
+  //  UI.insert(view, document.body);
+  dialog = bootbox.dialog({
+    title: "Image Capture",
+    message: " "
+  });
+  console.log(dialog);
+  dialog.find(".bootbox-body").remove();
+  console.log(dialog.find(".modal-body")[0]);
+  Blaze.renderWithData(Template.camera, null, dialog.find(".modal-body")[0]);
 };

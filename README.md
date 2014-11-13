@@ -1,6 +1,6 @@
 # Meteor Camera Package
 
-Add it to your [Meteor](http://meteor.com) app with `meteor add mdg:camera`. The api is super simple - there is only one function to call.
+Add it to your [Meteor](http://meteor.com) app with `meteor add bdunnette:camera`. The api is super simple - there is only one function to call.
 
 ### MeteorCamera.getPicture([options], callback)
 

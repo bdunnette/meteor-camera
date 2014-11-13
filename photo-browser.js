@@ -58,8 +58,8 @@ Template.viewfinder.rendered = function () {
   }, success, failure);
 
   // resize viewfinder to a reasonable size, not necessarily photo size
-  var viewfinderWidth = 320;
-  var viewfinderHeight = 240;
+  var viewfinderWidth = 560;
+  var viewfinderHeight = 420;
   var resized = false;
   video.addEventListener('canplay', function () {
     if (!resized) {
@@ -158,11 +158,11 @@ MeteorCamera.getPicture = function (options, callback) {
     options = {};
   }
 
-  desiredHeight = options.height || 640;
-  desiredWidth = options.width || 480;
+  desiredHeight = options.height || 960;
+  desiredWidth = options.width || 720;
 
   // Canvas#toDataURL takes the quality as a 0-1 value, not a percentage
-  quality = (options.quality || 49) / 100;
+  quality = (options.quality || 70) / 100;
 
   if (desiredHeight * 4 / 3 > desiredWidth) {
     canvasWidth = desiredHeight * 4 / 3;
@@ -175,25 +175,20 @@ MeteorCamera.getPicture = function (options, callback) {
   canvasWidth = Math.round(canvasWidth);
   canvasHeight = Math.round(canvasHeight);
 
-  var view;
-
   closeAndCallback = function () {
     var originalArgs = arguments;
-    UI.remove(view);
+//    UI.remove(view);
     photo.set(null);
     callback.apply(null, originalArgs);
   };
 
-  //  view = UI.renderWithData(Template.camera);
-  view = UI.toHTMLWithData(Template.camera);
-  console.log(view);
-  //  UI.insert(view, document.body);
   dialog = bootbox.dialog({
     title: "Image Capture",
-    message: " "
+    message: " ",
+    callback: function () {
+      console.log(this)
+    }
   });
-  console.log(dialog);
   dialog.find(".bootbox-body").remove();
-  console.log(dialog.find(".modal-body")[0]);
   Blaze.renderWithData(Template.camera, null, dialog.find(".modal-body")[0]);
 };
